@@ -1,0 +1,82 @@
+class Evento:
+    def __init__(self):
+        self.entradas_vendidas = [False] * 100
+        self.precios = {
+            'platinum': 120000,
+            'gold': 80000,
+            'silver': 50000
+        }
+        self.asistentes = {}
+
+    def comprar_entradas(self):
+        cantidad = int(input("ingrese la cantidad de entradas a comprar (1-3): "))
+        if cantidad < 1 or cantidad > 3:
+            print("cantidad inválida.")
+            return
+
+        disponibles = []
+        for i, vendida in enumerate(self.entradas_vendidas):
+            if not vendida:
+                disponibles.append(i + 1)
+
+        print("ubicaciones disponibles:", disponibles)
+        seleccionadas = []
+        for _ in range(cantidad):
+            ubicacion = int(input("seleccione una ubicacion disponible: "))
+            if ubicacion in disponibles and ubicacion not in seleccionadas:
+                seleccionadas.append(ubicacion)
+                self.entradas_vendidas[ubicacion - 1] = True
+            else:
+                print("ubicación no disponible. Seleccione otra.")
+
+        tipo_entrada = input("ingrese el tipo de entrada (platinum, gold o silver): ")
+        run_asistente = input("ingrese el RUN del asistente: ")
+        self.asistentes[run_asistente] = {
+            'ubicaciones': seleccionadas,
+            'tipo_entrada': tipo_entrada
+        }
+
+        print("operacion realizada correctamente.")
+
+    def mostrar_ubicaciones_disponibles(self):
+        for i, vendida in enumerate(self.entradas_vendidas):
+            estado = 'vendida' if vendida else 'disponible'
+            print(f"asiento {i + 1}: {estado}")
+
+    def mostrar_listado_asistentes(self):
+        for run, datos in sorted(self.asistentes.items()):
+            print(f"RUN: {run}")
+            print("ubicaciones:", datos['ubicaciones'])
+            print("tipo de entrada:", datos['tipo_entrada'])
+
+    def mostrar_ganancias_totales(self):
+        total = sum(self.precios[datos['tipo_entrada']] for datos in self.asistentes.values())
+        print("ganancias totales:", total)
+
+
+evento = Evento()
+
+while True:
+    print("\n--- MENU ---")
+    print("1. comprar entradas")
+    print("2. mostrar ubicaciones disponibles")
+    print("3. ver listado de asistentes")
+    print("4. mostrar ganancias totales")
+    print("5. salir")
+
+    opcion = input("seleccione una opcion: ")
+
+    if opcion == '1':
+        evento.comprar_entradas()
+    elif opcion == '2':
+        evento.mostrar_ubicaciones_disponibles()
+    elif opcion == '3':
+        evento.mostrar_listado_asistentes()
+    elif opcion == '4':
+        evento.mostrar_ganancias_totales()
+    elif opcion == '5':
+      fecha_actual = datetime.datetime.now().strftime("%d/%m/%y")
+      print(f"¡hasta pronto! michael recabal, {fecha_actual}")
+      break
+    else:
+        print("opcion invalida. intenta nuevamente")
